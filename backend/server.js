@@ -8,12 +8,22 @@ const cors = require("cors"); // Middleware pour gérer la politique de sécurit
 
 const app = express(); // Création de l'instance de l'application Express
 
+// --- Importer les routes ---
+const recipeRoutes = require("./routes/recipeRoutes");
+const userRoutes = require("./routes/userRoutes");
+
 // MIDDLEWARES DE TRAITEMENT DES DONNÉES ENTRANTES (avant d'atteindre les routes)
 app.use(express.json()); // Permet à Express de lire les corps de requêtes entrants en format JSON
 app.use(express.urlencoded({ extended: true })); // Permet de gérer les données envoyées via les formulaires
 
 // MIDDLEWARE DE SÉCURITÉ
 app.use(cors()); // Autorise notre frontend (qui tourne sur un autre port/domaine) à communiquer avec cette API
+
+// --- Définir les Routes ---
+// Toutes les routes commençant par /api/recipes seront gérées par recipeRoutes
+app.use("/api/recipes", recipeRoutes);
+// Toutes les routes commençant par /api/users seront gérées par userRoutes
+app.use("/api/users", userRoutes);
 
 // CONNEXION À LA BASE DE DONNÉES
 const DB_URI = process.env.DB_URI; // Récupère l'URI de connexion depuis les variables d'environnement
