@@ -210,6 +210,36 @@ const deleteRecipe = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Rechercher et filtrer des recettes
+ * @route   GET /api/recipes/search
+ * @access  Public
+ */
+const searchRecipes = async (req, res) => {
+  let filters = {};
+
+  try {
+    // Si l'utilisateur a fait une recherche par titre.
+    if (req.query.q) {
+      filters.$or = [
+        { title: { $regex: req.query.q, $options: "i" } },
+        { description: { $regex: req.query.q, $options: "i" } },
+      ];
+    }
+
+    // si l'utilisateur a fait un filter par perpTime
+    if (req.query.prepTime) {
+      filters.prepTime = { $lte: Number(req.query.prepTime) }; // $lte = Less Than or Equal
+    }
+
+    const filtredRecipes = await Recipe.find(filters);
+
+    return res.status(200).json(filtredRecipes);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   createRecipe,
   getRecipes,
@@ -217,4 +247,5 @@ module.exports = {
   getRecipeById,
   updateRecipe,
   deleteRecipe,
+  searchRecipes,
 };

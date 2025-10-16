@@ -6,6 +6,7 @@ const {
   getRecipeById,
   updateRecipe,
   deleteRecipe,
+  searchRecipes,
 } = require("../controllers/recipeController");
 
 const { protect } = require("../middlewares/authMiddleware");
@@ -20,6 +21,7 @@ router.put("/:id", protect, updateRecipe);
 router.delete("/:id", protect, deleteRecipe);
 
 // Public routes :
+router.get("/search", searchRecipes);
 router.get("/", optionalAuth, getRecipes);
 router.get("/:id", optionalAuth, getRecipeById);
 
