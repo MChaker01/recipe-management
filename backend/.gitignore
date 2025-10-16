@@ -1,0 +1,15 @@
+# Ignore le dossier contenant toutes les dépendances téléchargées par npm.
+# Ce dossier peut être très lourd et est recréé avec la commande "npm install".
+node_modules/
+
+# Ignore les fichiers d'environnement.
+# C'est CRUCIAL pour la sécurité, car ils contiennent des informations sensibles
+# comme les mots de passe, les clés d'API, etc.
+.env
+
+# Ignore les fichiers de log de npm.
+npm-debug.log*
+
+# Ignore les dossiers de production
+build/
+dist/
