@@ -19,6 +19,12 @@ app.use(express.urlencoded({ extended: true })); // Permet de gérer les donnée
 // MIDDLEWARE DE SÉCURITÉ
 app.use(cors()); // Autorise notre frontend (qui tourne sur un autre port/domaine) à communiquer avec cette API
 
+// Servir les fichiers statiques (images uploadées)
+// Cela rend le dossier "uploads" accessible publiquement
+// cette ligne dit à Express : "Quand quelqu'un demande une URL qui commence par /uploads,
+// cherche dans le dossier physique uploads/ et renvoie le fichier correspondant."
+app.use("/uploads", express.static("uploads"));
+
 // --- Définir les Routes ---
 // Toutes les routes commençant par /api/recipes seront gérées par recipeRoutes
 app.use("/api/recipes", recipeRoutes);

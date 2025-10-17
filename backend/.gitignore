@@ -2,6 +2,8 @@
 # Ce dossier peut être très lourd et est recréé avec la commande "npm install".
 node_modules/
 
+uploads/
+
 # Ignore les fichiers d'environnement.
 # C'est CRUCIAL pour la sécurité, car ils contiennent des informations sensibles
 # comme les mots de passe, les clés d'API, etc.

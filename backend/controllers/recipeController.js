@@ -1,4 +1,5 @@
 const Recipe = require("../models/Recipe");
+const fs = require("fs");
 
 /**
  * @desc    Créer une recette
@@ -9,52 +10,58 @@ const Recipe = require("../models/Recipe");
 const createRecipe = async (req, res) => {
   try {
     // 1. Récupérer les données du formulaire depuis req.body
-    const {
-      title,
-      ingredients,
-      description,
-      coverImage,
-      prepTime,
-      servings,
-      steps,
-    } = req.body;
+    let { title, ingredients, description, prepTime, servings, steps } =
+      req.body;
+
+    if (typeof ingredients === "string") {
+      ingredients = JSON.parse(ingredients);
+    }
+
+    if (typeof steps === "string") {
+      steps = JSON.parse(steps);
+    }
 
     // 2. Valider les champs obligatoires AVANT de contacter la BDD
 
     if (!title || !description || !prepTime || !servings) {
       return res.status(400).json({
-        message:
-          "title, description, image, preparation time and servings are required.",
+        message: "Required fields missing.",
       });
     }
 
     if (!ingredients || ingredients.length === 0) {
       return res.status(400).json({
-        message: "At least one ingredient is required.",
+        message: "At least one ingredient required.",
       });
     }
 
     if (!steps || steps.length === 0) {
-      return res
-        .status(400)
-        .json({ message: "At least one step is required." });
+      return res.status(400).json({ message: "At least one step required." });
     }
 
-    // 3. Créer la recette en associant l'utilisateur connecté
-    // req.user.id vient du middleware 'protect' qui a décodé le token JWT
+    // 3. récupérer le chemin de l'image uploadée
+    // Si un fichier a été uploadé, Multer l'a traité et mis dans req.file
+    // On stocke le chemin relatif (pas absolu) pour plus de flexibilité
+    let coverImage = null;
+    if (req.file) {
+      // On préfixe avec "/" pour créer une URL valide
+      coverImage = "/" + req.file.path.replace(/\\/g, "/"); // Remplace \ par / (pour Windows)
+    }
 
+    // 4. Créer la recette en associant l'utilisateur connecté
+    // req.user.id vient du middleware 'protect' qui a décodé le token JWT
     const recipe = await Recipe.create({
       title,
       ingredients,
       description,
-      coverImage,
+      coverImage, // Le chemin vers l'image (ou null si pas d'image)
       prepTime,
       servings,
       steps,
       user: req.user.id,
     });
 
-    // 4. Renvoyer une réponse de succès avec le code 201 (Created)
+    // 5. Renvoyer une réponse de succès avec le code 201 (Created)
     res
       .status(201)
       .json({ message: "Recipe created successffully.", Recipe: recipe });
@@ -149,15 +156,44 @@ const updateRecipe = async (req, res) => {
       });
     }
 
-    // 4. Mettre à jour la recette avec les nouvelles données de req.body
-    // new: true → retourne le document APRÈS modification (pas l'ancien)
-    // runValidators: true → applique les validations du schéma Mongoose
+    // Parser les données si elles viennent en format string (form-data)
+    let updateData = { ...req.body };
+
+    if (typeof updateData.ingredients === "string") {
+      updateData.ingredients = JSON.parse(updateData.ingredients);
+    }
+
+    if (typeof updateData.steps === "string") {
+      updateData.steps = JSON.parse(updateData.steps);
+    }
+
+    // Gérer l'upload d'une nouvelle image
+    // Si un fichier a été uploadé, on met à jour coverImage
+    if (req.file) {
+      if (recipeToUpdate.coverImage) {
+        // récupérer l’ancien fichier à supprimer et enlèver le premier caractère du path (/).
+        const filePath = recipeToUpdate.coverImage.slice(1);
+
+        if (fs.existsSync(filePath)) {
+          try {
+            await fs.promises.unlink(filePath);
+          } catch (error) {
+            console.error("Error deleting old image", error);
+          }
+        }
+      }
+
+      updateData.coverImage = "/" + req.file.path.replace(/\\/g, "/");
+    }
+
+    // Sinon, on garde l'ancienne image (ou celle envoyée dans req.body)
+    // Mettre à jour la recette avec les nouvelles données de req.body
     const updatedRecipe = await Recipe.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       {
-        new: true,
-        runValidators: true,
+        new: true, // new: true → retourne le document APRÈS modification (pas l'ancien)
+        runValidators: true, // runValidators: true → applique les validations du schéma Mongoose
       }
     );
 
@@ -194,7 +230,19 @@ const deleteRecipe = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // 4. Supprimer le document trouvé
+    // 4. Supprimer l'image si elle existe
+    if (recipeToDelete.coverImage) {
+      const filePath = recipeToDelete.coverImage.slice(1);
+      if (fs.existsSync(filePath)) {
+        try {
+          await fs.promises.unlink(filePath);
+        } catch (error) {
+          console.error("Error deleting image", error);
+        }
+      }
+    }
+
+    // 5. Supprimer le document trouvé
     await recipeToDelete.deleteOne();
 
     // Renvoyer une confirmation de suppression
@@ -216,23 +264,46 @@ const deleteRecipe = async (req, res) => {
  * @access  Public
  */
 const searchRecipes = async (req, res) => {
-  let filters = {};
-
   try {
+    // toujours appliqué.
+    let visibilityFilter;
     // Si l'utilisateur a fait une recherche par titre.
+    if (req.user) {
+      visibilityFilter = { $or: [{ isPublic: true }, { user: req.user.id }] };
+    } else {
+      visibilityFilter = { isPublic: true };
+    }
+
+    // 2. Filtres additionnels (recherche, prepTime)
+    let additionnalFilters = [];
+
     if (req.query.q) {
-      filters.$or = [
-        { title: { $regex: req.query.q, $options: "i" } },
-        { description: { $regex: req.query.q, $options: "i" } },
-      ];
+      additionnalFilters.push({
+        $or: [
+          { title: { $regex: req.query.q, $options: "i" } },
+          { description: { $regex: req.query.q, $options: "i" } },
+        ],
+      });
     }
 
     // si l'utilisateur a fait un filter par perpTime
     if (req.query.prepTime) {
-      filters.prepTime = { $lte: Number(req.query.prepTime) }; // $lte = Less Than or Equal
+      additionnalFilters.push({
+        prepTime: { $lte: Number(req.query.prepTime) },
+      }); // $lte = Less Than or Equal
     }
 
-    const filtredRecipes = await Recipe.find(filters);
+    let finalFilter;
+
+    if (additionnalFilters.length > 0) {
+      finalFilter = {
+        $and: [visibilityFilter, ...additionnalFilters],
+      };
+    } else {
+      finalFilter = visibilityFilter;
+    }
+
+    const filtredRecipes = await Recipe.find(finalFilter);
 
     return res.status(200).json(filtredRecipes);
   } catch (error) {
