@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -13,10 +13,16 @@ const Login = () => {
   const { email, password } = formData;
 
   // 2. Récupère la fonction login depuis useAuth()
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
 
   // 3. Récupère navigate depuis useNavigate()
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({

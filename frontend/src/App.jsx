@@ -1,16 +1,19 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
+import Navbar from "./components/Navbar";
 import "./index.css";
+import HomePage from "./pages/HomePage";
 
 // TODO: Importer les pages quand on les créera
 
 function App() {
   return (
     <>
+      <Navbar />
       <Routes>
         {/* Routes publiques */}
-        <Route path="/" element={<div>Home Page (TODO)</div>} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" />
         <Route path="/recipes/:id" />

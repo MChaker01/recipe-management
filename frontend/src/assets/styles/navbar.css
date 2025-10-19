@@ -1,0 +1,158 @@
+/* ==========================================================
+   NAVBAR STYLES
+   ----------------------------------------------------------
+   Minimal editorial bar with tactile hover effects
+   ========================================================== */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border);
+  padding: 0.9rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* -------- Logo / Site name -------- */
+.navbar-logo {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--olive);
+  text-decoration: none;
+  letter-spacing: 0.3px;
+}
+.navbar-logo:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* -------- Links -------- */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.navbar-links a {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.navbar-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.25s var(--ease);
+}
+.navbar-links a:hover {
+  color: var(--accent);
+}
+.navbar-links a:hover::after {
+  width: 100%;
+}
+
+/* Logout button inherits global .btn-outline */
+.navbar-links .btn-outline {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* -------- Mobile menu toggle -------- */
+.navbar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  padding: 4px;
+}
+.navbar-toggle span {
+  width: 22px;
+  height: 2px;
+  background-color: var(--text);
+  transition: background 0.2s ease;
+}
+.navbar-toggle:hover span {
+  background-color: var(--accent);
+}
+
+/* -------- Responsive -------- */
+/* ===== Mobile Menu Behavior ===== */
+@media (max-width: 768px) {
+  .navbar {
+    position: relative;
+  }
+
+  .navbar-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    background: var(--bg-alt);
+    flex-direction: column;
+    padding: 1rem 2rem;
+    border-top: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    animation: fadeSlide 0.25s var(--ease);
+  }
+
+  .navbar-links.open {
+    display: flex;
+  }
+
+  .navbar-links a,
+  .navbar-links button {
+    padding: 0.6rem 0;
+  }
+
+  /* Toggle animation */
+  .navbar-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    z-index: 100;
+  }
+  .navbar-toggle span {
+    width: 22px;
+    height: 2px;
+    background-color: var(--text);
+    transition: transform 0.3s var(--ease), opacity 0.2s;
+  }
+
+  /* X animation when active */
+  .navbar-toggle.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .navbar-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .navbar-toggle.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  @keyframes fadeSlide {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

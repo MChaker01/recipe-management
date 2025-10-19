@@ -20,7 +20,7 @@
   /* Accents */
   --accent: #c45d24; /* paprika */
   --accent-light: #e8844e;
-  --olive: #556b2f;
+  --olive: rgb(85, 107, 47);
   --sage: #8b956d;
 
   /* Fonts */
@@ -242,4 +242,47 @@ body::before {
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* ================================
+  Error Message
+================================== */
+.error-message {
+  color: var(--accent-red, #d64545);
+  background: color-mix(in srgb, var(--accent-red, #d64545) 10%, transparent);
+  text-align: center;
+  padding: 0.7rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.2px;
+  font-family: var(--font-accent, "Poppins", sans-serif);
+  animation: fadeInError 0.3s ease-in-out;
+}
+
+/* subtle fade/slide animation */
+@keyframes fadeInError {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Inline variant (for forms or small messages) */
+.error-message.inline {
+  display: inline-block;
+  margin-top: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-left: none;
+  border-radius: 2px;
+  background: none;
+  color: var(--accent-red, #d64545);
+  font-weight: 500;
+  animation: none;
 }
