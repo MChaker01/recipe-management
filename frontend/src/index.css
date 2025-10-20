@@ -253,7 +253,7 @@ body::before {
   text-align: center;
   padding: 0.7rem 1rem;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.5;
   margin-top: 0.5rem;
   border-radius: 4px;
@@ -285,4 +285,32 @@ body::before {
   color: var(--accent-red, #d64545);
   font-weight: 500;
   animation: none;
+}
+
+/* ==========================================================
+   SUCCESS MESSAGE
+   ---------------------------------------------------------- */
+
+.success-message {
+  background-color: #eaf7eb;
+  border: 1px solid #b2d8b5;
+  color: #265c2a;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+  text-align: center;
+  animation: fadeInSuccess 0.4s ease forwards;
+}
+
+/* Subtle animation for better feel */
+@keyframes fadeInSuccess {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

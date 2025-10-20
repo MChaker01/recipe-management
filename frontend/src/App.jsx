@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
 import "./index.css";
 import HomePage from "./pages/HomePage";
@@ -15,7 +16,7 @@ function App() {
         {/* Routes publiques */}
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" />
+        <Route path="/register" element={<Register />} />
         <Route path="/recipes/:id" />
 
         {/* Routes protégées */}
