@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
 import "./index.css";
 import HomePage from "./pages/HomePage";
+import RecipeDetails from "./pages/RecipeDetails";
 
 // TODO: Importer les pages quand on les créera
 
@@ -17,7 +18,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/recipes/:id" />
+        <Route path="/recipes/:id" element={<RecipeDetails />} />
 
         {/* Routes protégées */}
         <Route

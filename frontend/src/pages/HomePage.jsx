@@ -78,20 +78,26 @@ const HomePage = () => {
       {/* 🥘 Recipes Grid */}
       <div className="recipe-grid">
         {recipes.map((recipe) => (
-          <article className="recipe-card" key={recipe._id}>
-            <img
-              src={`http://localhost:3000${recipe.coverImage}`}
-              alt={recipe.title}
-            />
-            <div className="recipe-content">
-              <h3 className="recipe-title">{recipe.title}</h3>
-              <p className="recipe-desc">{recipe.description}</p>
-              <div className="recipe-meta">
-                <span>⏱️ {recipe.prepTime} min</span>
-                <span>🍽️ {recipe.servings} servings</span>
+          <Link
+            to={`/recipes/${recipe._id}`}
+            style={{ textDecoration: "none" }}
+            key={recipe._id}
+          >
+            <article className="recipe-card">
+              <img
+                src={`http://localhost:3000${recipe.coverImage}`}
+                alt={recipe.title}
+              />
+              <div className="recipe-content">
+                <h3 className="recipe-title">{recipe.title}</h3>
+                <p className="recipe-desc">{recipe.description}</p>
+                <div className="recipe-meta">
+                  <span>⏱️ {recipe.prepTime} min</span>
+                  <span>🍽️ {recipe.servings} servings</span>
+                </div>
               </div>
-            </div>
-          </article>
+            </article>
+          </Link>
         ))}
       </div>
     </section>
