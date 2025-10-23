@@ -80,7 +80,7 @@ const Register = () => {
 
       {/* Right Form Section */}
       <section className="auth-form-section">
-        <form className="auth-form" method="post" onSubmit={handleSubmit}>
+        <form className="auth-form" onSubmit={handleSubmit}>
           <h2 className="form-title">Create your account</h2>
 
           <div className="name-fields">

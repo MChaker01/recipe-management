@@ -1,0 +1,348 @@
+/* ==========================================================
+   CREATE RECIPE FORM STYLES
+   ----------------------------------------------------------
+   Editorial, tactile, consistent with RecipeNest identity
+   ========================================================== */
+
+.create-recipe-page {
+  background: var(--bg);
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.page-title {
+  text-align: center;
+  font-family: var(--font-display);
+  color: var(--olive);
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* ===============================
+   Form Container
+   =============================== */
+.recipe-form {
+  max-width: 700px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  margin: 0 auto;
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ===============================
+   Input Fields
+   =============================== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label,
+.form-group .label {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  font-size: 1rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(196, 93, 36, 0.15);
+}
+
+/* ===============================
+   Half-width inputs (inline)
+   =============================== */
+.form-group.half {
+  width: 100%;
+}
+
+@media (min-width: 700px) {
+  .form-group.half {
+    display: inline-flex;
+    flex-direction: column;
+    width: calc(50% - 0.75rem);
+  }
+
+  .recipe-form {
+    flex-wrap: wrap;
+  }
+
+  .form-group.half:nth-child(3),
+  .form-group.half:nth-child(4) {
+    margin-top: 0.5rem;
+  }
+}
+
+/* ===============================
+   Radio Buttons (Visibility)
+   =============================== */
+.visibility-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.radio-options {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.3rem;
+}
+
+.radio-options label {
+  font-size: 0.95rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.radio-options input[type="radio"] {
+  accent-color: var(--accent);
+}
+
+/* ==========================================================
+   INGREDIENTS + STEPS + IMAGE UPLOAD
+   ---------------------------------------------------------- */
+
+/* General section */
+.form-section {
+  margin-top: 2rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--olive);
+  margin-bottom: 1rem;
+  border-left: 3px solid var(--accent);
+  padding-left: 0.6rem;
+}
+
+/* 🧂 Ingredients */
+.ingredient-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.ingredient-inputs input {
+  flex: 1 1 180px;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.add-btn {
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+}
+
+.ingredients-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.ingredient-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.4rem;
+  border-bottom: 1px dashed var(--border);
+  transition: background 0.2s ease;
+}
+
+.ingredient-item:last-child {
+  border-bottom: none;
+}
+
+/* Ingredient content */
+.ingredient-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.ingredient-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.ingredient-qty {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Remove button (×) */
+.ingredient-item button,
+.step-item button {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+}
+
+.ingredient-item button:hover,
+.step-item button:hover {
+  color: var(--accent);
+}
+
+/* 🧾 Steps */
+.step-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.step-inputs textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+.steps-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  list-style: decimal;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.step-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.6rem 0.2rem;
+  border-bottom: 1px dashed var(--border);
+}
+
+.step-item:last-child {
+  border-bottom: none;
+}
+
+/* Step text */
+.step-content {
+  flex: 1;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+/* ==========================================================
+   INLINE IMAGE UPLOAD BAR
+   ---------------------------------------------------------- */
+
+.image-upload-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  width: 100%;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Hide the native input */
+.image-upload-bar input[type="file"] {
+  display: none;
+}
+
+/* "Choose Image" Button */
+.choose-btn {
+  background: var(--olive);
+  color: #fff;
+  padding: 0.55rem 1.1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  white-space: nowrap;
+}
+
+.choose-btn:hover {
+  background: var(--accent);
+}
+
+.choose-btn:active {
+  transform: scale(0.97);
+}
+
+/* File Info */
+.file-info {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.placeholder {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.file-name {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Image Preview (same style as before) */
+.preview {
+  margin-top: 1rem;
+  max-width: 280px;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  background: #fff;
+}
+
+.preview-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* ===============================
+   Submit button
+   =============================== */
+.submit-btn {
+  margin-top: 0.5rem;
+  align-self: flex-end;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+}

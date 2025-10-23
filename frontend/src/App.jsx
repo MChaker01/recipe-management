@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import "./index.css";
 import HomePage from "./pages/HomePage";
 import RecipeDetails from "./pages/RecipeDetails";
+import AddRecipe from "./pages/AddRecipe";
 
 // TODO: Importer les pages quand on les créera
 
@@ -33,7 +34,7 @@ function App() {
           path="/add-recipe"
           element={
             <ProtectedRoute>
-              <div>Add Recipe Page (TODO)</div>
+              <AddRecipe />
             </ProtectedRoute>
           }
         />

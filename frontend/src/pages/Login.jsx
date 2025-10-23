@@ -68,7 +68,7 @@ const Login = () => {
       </section>
 
       <section className="login-form-section">
-        <form className="login-form" method="post" onSubmit={handleSubmit}>
+        <form className="login-form" onSubmit={handleSubmit}>
           <h2 className="form-title">Sign in to your kitchen</h2>
 
           <label className="input-field">
