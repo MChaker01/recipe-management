@@ -63,7 +63,7 @@
   transition: border-color 0.2s ease;
 }
 
-/* Apply button */
+/* Apply button and clear button*/
 .recipe-controls .btn {
   padding: 0.65rem 1.2rem;
   font-size: 0.95rem;
@@ -73,6 +73,27 @@
   display: flex;
   justify-content: center;
   width: 100%;
+}
+
+.btn-clear {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+    transform 0.1s ease;
+}
+
+.btn-clear:hover {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--text-light, #999);
+}
+
+.btn-clear:active {
+  transform: scale(0.97);
 }
 
 /* 🧩 Recipe Grid */

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "../assets/styles/recipe-form.css";
 import Spinner from "../components/Spinner";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 
-const AddRecipe = () => {
+const RecipeForm = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -20,11 +20,17 @@ const AddRecipe = () => {
   });
   const [steps, setSteps] = useState([]);
   const [currentStep, setCurrentStep] = useState("");
+
   const [coverImage, setCoverImage] = useState(null);
+  const [existingImageURL, setExistingImageURL] = useState(null);
+
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const { token } = useAuth();
+
+  const { id } = useParams();
+  const isEditMode = Boolean(id);
 
   const navigate = useNavigate();
 
@@ -94,6 +100,43 @@ const AddRecipe = () => {
     setCurrentStep("");
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const config = token
+          ? { headers: { Authorization: `Bearer ${token}` } }
+          : {};
+
+        if (isEditMode) {
+          const response = await axios.get(
+            `http://localhost:3000/api/recipes/${id}`,
+            config
+          );
+
+          setFormData({
+            title: response.data.title,
+            description: response.data.description,
+            prepTime: response.data.prepTime,
+            servings: response.data.servings,
+            isPublic: response.data.isPublic,
+          });
+          setIngredients(response.data.ingredients);
+          setSteps(response.data.steps);
+          setExistingImageURL(response.data.coverImage);
+          console.log(response.data);
+        }
+      } catch (error) {
+        setError("Error while receiving recipe's data.");
+        console.log("Error while receiving recipe's data : ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [isEditMode, id, token]);
+
   const handleSubmit = async (e) => {
     setError("");
     e.preventDefault();
@@ -111,8 +154,8 @@ const AddRecipe = () => {
     if (
       !formData.title.trim() ||
       !formData.description.trim() ||
-      !formData.prepTime.trim() ||
-      !formData.servings.trim()
+      !formData.prepTime ||
+      !formData.servings
     ) {
       setError("Required fields are empty.");
       return;
@@ -146,12 +189,12 @@ const AddRecipe = () => {
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
+      const url = isEditMode
+        ? `http://localhost:3000/api/recipes/${id}`
+        : "http://localhost:3000/api/recipes/";
 
-      const response = await axios.post(
-        "http://localhost:3000/api/recipes/",
-        dataToSend,
-        config
-      );
+      const method = isEditMode ? "put" : "post";
+      const response = await axios[method](url, dataToSend, config);
 
       // 6. Rediriger vers la page de la recette créée
       navigate(`/recipes/${response.data.Recipe._id}`);
@@ -168,7 +211,9 @@ const AddRecipe = () => {
 
   return (
     <main className="create-recipe-page">
-      <h1 className="page-title">Create a New Recipe</h1>
+      <h1 className="page-title">
+        {!isEditMode ? "Create a New Recipe" : "Edit Recipe"}
+      </h1>
 
       <form className="recipe-form" onSubmit={handleSubmit}>
         {/* Title */}
@@ -365,10 +410,14 @@ const AddRecipe = () => {
             </div>
           </div>
 
-          {coverImage && (
+          {(coverImage || existingImageURL) && (
             <div className="preview">
               <img
-                src={URL.createObjectURL(coverImage)}
+                src={
+                  coverImage
+                    ? URL.createObjectURL(coverImage)
+                    : `http://localhost:3000${existingImageURL}`
+                }
                 alt="Preview"
                 className="preview-img"
               />
@@ -387,4 +436,4 @@ const AddRecipe = () => {
   );
 };
 
-export default AddRecipe;
+export default RecipeForm;

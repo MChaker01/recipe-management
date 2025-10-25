@@ -51,6 +51,11 @@ const HomePage = () => {
     [token]
   );
 
+  const clearFilters = () => {
+    setFilters({ q: "", prepTime: "" });
+    fetchRecipes();
+  };
+
   // 4. useEffect pour appeler fetchRecipes au montage
   useEffect(() => {
     fetchRecipes();
@@ -105,6 +110,9 @@ const HomePage = () => {
           onClick={() => fetchRecipes(filters)}
         >
           Apply
+        </button>
+        <button className="btn btn-clear" onClick={clearFilters}>
+          Clear
         </button>
       </div>
 

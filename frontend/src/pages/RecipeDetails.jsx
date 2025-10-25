@@ -18,7 +18,7 @@ const RecipeDetails = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { token, user } = useAuth();
+  const { token, user, isLoading: authLoading } = useAuth();
 
   // recipe.user c'est l'id du créateur de la recette
   // user._id c'est l'id de l'utilisateur connecté disponible via useAuth()
@@ -26,6 +26,10 @@ const RecipeDetails = () => {
 
   // 3. useEffect pour fetch les données
   useEffect(() => {
+    if (authLoading) {
+      return;
+    }
+
     const getRecipe = async () => {
       setIsLoading(true);
       try {
@@ -51,7 +55,7 @@ const RecipeDetails = () => {
     };
 
     getRecipe();
-  }, [id, token]);
+  }, [id, token, authLoading]);
 
   const handleDelete = async () => {
     try {
@@ -73,6 +77,10 @@ const RecipeDetails = () => {
       console.error("Error while deleting recipe : ", error);
     }
   };
+
+  if (authLoading) {
+    return <Spinner />;
+  }
 
   if (error) {
     return <div className="error-message">{error}</div>;

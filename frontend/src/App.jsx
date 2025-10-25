@@ -6,7 +6,7 @@ import Navbar from "./components/Navbar";
 import "./index.css";
 import HomePage from "./pages/HomePage";
 import RecipeDetails from "./pages/RecipeDetails";
-import AddRecipe from "./pages/AddRecipe";
+import RecipeForm from "./pages/RecipeForm";
 import MyRecipes from "./pages/MyRecipes";
 
 // TODO: Importer les pages quand on les créera
@@ -35,7 +35,7 @@ function App() {
           path="/add-recipe"
           element={
             <ProtectedRoute>
-              <AddRecipe />
+              <RecipeForm />
             </ProtectedRoute>
           }
         />
@@ -43,7 +43,7 @@ function App() {
           path="/edit-recipe/:id"
           element={
             <ProtectedRoute>
-              <div>Edit Recipe Page (TODO)</div>
+              <RecipeForm />
             </ProtectedRoute>
           }
         />
