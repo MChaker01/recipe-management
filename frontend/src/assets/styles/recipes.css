@@ -69,11 +69,20 @@
   font-size: 0.95rem;
 }
 
+.recipe-grid-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 /* 🧩 Recipe Grid */
 .recipe-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
 }
 
 /* 🍲 Recipe Card */
@@ -85,6 +94,14 @@
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  height: 100%;
+  width: 100%;
+}
+
+.recipe-grid:has(.recipe-card:nth-child(1):last-child),
+.recipe-grid:has(.recipe-card:nth-child(2):last-child) {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 380px));
+  justify-content: center;
 }
 
 .recipe-card img {

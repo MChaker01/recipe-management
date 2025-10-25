@@ -1,13 +1,16 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "../assets/styles/recipe-details.css";
 import Spinner from "./../components/Spinner";
 import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 const RecipeDetails = () => {
   // 1. Récupérer l'ID depuis l'URL
   const { id } = useParams();
+
+  const navigate = useNavigate();
 
   // 2. Créer le state pour stocker la recette
   const [recipe, setRecipe] = useState(null);
@@ -15,7 +18,11 @@ const RecipeDetails = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { token } = useAuth();
+  const { token, user } = useAuth();
+
+  // recipe.user c'est l'id du créateur de la recette
+  // user._id c'est l'id de l'utilisateur connecté disponible via useAuth()
+  const isOwner = user && recipe && recipe.user.toString() === user._id;
 
   // 3. useEffect pour fetch les données
   useEffect(() => {
@@ -45,6 +52,27 @@ const RecipeDetails = () => {
 
     getRecipe();
   }, [id, token]);
+
+  const handleDelete = async () => {
+    try {
+      const config = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : {};
+      if (confirm("Are you sure you want to delete?")) {
+        const response = await axios.delete(
+          `http://localhost:3000/api/recipes/${id}`,
+          config
+        );
+
+        if (response) {
+          navigate("/my-recipes");
+        }
+      }
+    } catch (error) {
+      setError("Error while deleting recipe.");
+      console.error("Error while deleting recipe : ", error);
+    }
+  };
 
   if (error) {
     return <div className="error-message">{error}</div>;
@@ -78,6 +106,21 @@ const RecipeDetails = () => {
           </p>
 
           <p className="recipe-desc">{recipe.description}</p>
+
+          {isOwner && (
+            <div className="recipe-actions">
+              <Link
+                to={`/edit-recipe/${recipe._id}`}
+                style={{ textDecoration: "none" }}
+                className="btn btn-secondary"
+              >
+                ✏️ Edit
+              </Link>
+              <button onClick={handleDelete} className="btn btn-danger">
+                🗑️ Delete
+              </button>
+            </div>
+          )}
         </div>
       </header>
 

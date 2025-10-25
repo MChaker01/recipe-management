@@ -7,6 +7,7 @@ import "./index.css";
 import HomePage from "./pages/HomePage";
 import RecipeDetails from "./pages/RecipeDetails";
 import AddRecipe from "./pages/AddRecipe";
+import MyRecipes from "./pages/MyRecipes";
 
 // TODO: Importer les pages quand on les créera
 
@@ -26,7 +27,7 @@ function App() {
           path="/my-recipes"
           element={
             <ProtectedRoute>
-              <div>My Recipes Page (TODO)</div>
+              <MyRecipes />
             </ProtectedRoute>
           }
         />
